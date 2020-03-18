@@ -1,0 +1,12 @@
+*.7z
+/backup
+/bin
+*.log
+/hexchat
+/HexChatPortable
+/UOAM
+/easyuo
+/OpenEUO
+/Razor
+
+
