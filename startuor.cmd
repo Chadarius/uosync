@@ -15,6 +15,9 @@ set uostorage=%~dp0
 set uorazorlocal=%uostorage%Razor
 set uolocaldir=C:\UORenaissance
 set uoamlocal=%uolocaldir%\UOAM
+:: Client being used OSI or CUO 
+:: Directs sync to use specific client directory
+set client=OSI
 set PATH=%uostorage%bin;%PATH%
 
 if not exist "%uolocaldir%" (
@@ -94,31 +97,29 @@ for /f "skip=%Keep% delims=" %%A in ('dir /a:-d /b /o:-d /t:c %uostorage%backup\
 	if exist "%uostorage%backup\%%A" del "%uostorage%backup\%%A"
 )
 
+::Sync UORenaissance Houses.txt to UOAM Map file UORHouses.map 
+echo.
+echo UO Local Directory is %uoamlocal%"
+cd "%uostorage%UOAM"
+cd
+powershell -ExecutionPolicy Unrestricted -f "%uoamlocal%\UORHousePositions.ps1"
+cd "%uostorage%"
+cd
+
 ::Sync UOAM from the cloud
 echo Sync UOAM from %uostorage%UOAM to %uolocaldir%\UOAM
 if not exist "%uostorage%bin\robocopy-uoam.exe" copy c:\windows\system32\robocopy.exe "%uostorage%bin\robocopy-uoam.exe"
-robocopy-uoam.exe "c:\users\chada\Google Drive\uo\UOAM" "c:\UORenaissance\UOAM" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-uoam.log"
+robocopy-uoam.exe "%uostorage%UOAM" "%uoamlocal%" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-uoam.log"
 
-::Sync UORenaissance Houses.txt to UOAM Map file UORHouses.map 
-cd "%uoamlocal%"
-powershell -ExecutionPolicy Unrestricted -f "%uoamlocal%\UORHousePositions.ps1"
-cd "%uostorage%"
 
 ::Razor Sync from cloud
-echo Syncing UO Razor settings from %uostorage%Razor to %uolocaldir%\Razor
+echo Syncing UO Razor settings from %uostorage%Razor to %uolocaldir%\Razor\%client%
 echo.
 if not exist "%uostorage%bin\robocopy-razor.exe" copy c:\windows\system32\robocopy.exe "%uostorage%bin\robocopy-razor.exe"
-
-if not exist "%uolocaldir%\Razor\CUO\Profiles" mkdir "%uolocaldir%\Razor\CUO\Profiles"
-if not exist "%uolocaldir%\Razor\OSI\Profiles" mkdir "%uolocaldir%\Razor\OSI\Profiles"
-
-if not exist "%uolocaldir%\Razor\CUO\Macros" mkdir "%uolocaldir%\Razor\CUO\Macros"
-if not exist "%uolocaldir%\Razor\OSI\Macros" mkdir "%uolocaldir%\Razor\OSI\Macros"
-
-::robocopy-razor.exe "c:\users\chada\Google Drive\uo\Razor\Profiles" "c:\UORenaissance\Razor\CUO\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razorprofiles.log"
-::robocopy-razor.exe "c:\users\chada\Google Drive\uo\Razor\Macros" "c:\UORenaissance\Razor\CUO\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razormacros.log"
-robocopy-razor.exe "c:\users\chada\Google Drive\uo\Razor\Profiles" "c:\UORenaissance\Razor\OSI\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razorprofilesOSI.log"
-robocopy-razor.exe "c:\users\chada\Google Drive\uo\Razor\Macros" "c:\UORenaissance\Razor\OSI\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razormacrosOSI.log"
+if not exist "%uolocaldir%\Razor\%client%\Profiles" mkdir "%uolocaldir%\Razor\%client%\Profiles"
+if not exist "%uolocaldir%\Razor\%client%\Macros" mkdir "%uolocaldir%\Razor\%client%\Macros"
+robocopy-razor.exe "%uostorage%Razor\Profiles" "%uolocaldir%\Razor\%client%\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razorprofilesOSI.log"
+robocopy-razor.exe "%uostorage%Razor\Macros" "%uolocaldir%\Razor\%client%\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razormacrosOSI.log"
 
 ::Backup lastest Razor config
 if exist "%uostorage%Razor" 7za.exe u -r "%uostorage%backup\razor-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uostorage%Razor" 
@@ -127,12 +128,10 @@ if exist "%uostorage%Razor" 7za.exe u -r "%uostorage%backup\razor-%DATE:~-4%.%DA
 echo Syncing UOClient Desktop settings from %uostorage%uoclient\Desktop to %uolocaldir%\Desktop
 echo.
 if not exist "%uostorage%bin\robocopy-uoclient.exe" copy c:\windows\system32\robocopy.exe "%uostorage%bin\robocopy-uoclient.exe"
-
 if not exist "%uolocaldir%\Desktop" mkdir "%uolocaldir%\Desktop" 
+if exist "%uostorage%Desktop" 7za.exe u -r "%uostorage%backup\uoclientdesktop-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uolocaldir%\Desktop" 
+robocopy-uoclient.exe "%uostorage%uoclient\Desktop" "%uolocaldir%\Desktop" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoclient-config-down.log"
 
-if exist "%uolocaldir%\Desktop" 7za.exe u -r "%uostorage%backup\uoclientdesktop-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uolocaldir%\Desktop" 
-
-if exist "%uostorage%uoclient\Desktop" "%uostorage%bin\robocopy-uoclient.exe" "%uostorage%uoclient\Desktop" "%uolocaldir%\Desktop" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoclient-config-down.log /TEE /NDL"
 
 ::Backup UOAM .map files
 echo Backing up UOAM .map files
@@ -145,7 +144,7 @@ if exist "%uoamlocal%\uoam.reg" reg import "%uoamlocal%\uoam.reg"
 
 ::start "razor" /D "%uorazorlocal%" "%uorazorlocal%\Razor.exe"
 rem Start UO Renaissance Launcher
-"C:\Users\chada\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
+"%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
 
 ::Start EasyUO and OpenEUO
 ::cd %uostorage%easyuo
@@ -162,8 +161,8 @@ if exist "%uostorage%HexChatPortable\HexChatPortable.exe" start "Hexchat" /D "%u
 echo Starting UOClient Desktop sync up
 echo.
 start /B "uoclient up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoclient.exe" "%uolocaldir%\Desktop" "%uostorage%uoclient\Desktop" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoclient-up.log" /TEE /NDL"
-start /B "uorazor OSI profiles up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\OSI\Profiles" "%uostorage%Razor\Profiles" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razorprofilesOSI-up.log" /TEE /NDL"
-start /B "uorazor OSI macros up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\OSI\Macros" "%uostorage%Razor\Macros" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razormacrosOSI-up.log" /TEE /NDL"
+start /B "uorazor OSI profiles up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Profiles" "%uostorage%Razor\Profiles" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razorprofilesOSI-up.log" /TEE /NDL"
+start /B "uorazor OSI macros up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razormacrosOSI-up.log" /TEE /NDL"
 start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uolocaldir%\UOAM" "%uostorage%UOAM" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoam-up.log" /TEE /NDL"
 
 ::Task Process watch here
@@ -172,7 +171,6 @@ start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uo
 ::@powershell start -verb runas wscript //B  "%uostorage%uowatch.vbs"
 cd %uostorage%
 @powershell start -verb runas "uorwatch.cmd"
-
 
 
 

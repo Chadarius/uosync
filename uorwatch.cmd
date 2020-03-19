@@ -8,6 +8,7 @@ set uorazorlocal=%uostorage%Razor
 set uolocaldir=C:\UORenaissance
 set uoamlocal=%uolocaldir%\UOAM
 set PATH=%uostorage%bin;%PATH%
+set client=OSI
 
 :LOOP1
 echo Checking for Razor...
@@ -54,8 +55,8 @@ reg export "HKCU\Software\UOAM" "%uoamlocal%\uoam.reg" /y
 
 ::Sync up Razor and UOClient Desktop directories to the cloud one last time.
 %uostorage%bin\robocopy-uoclient.exe "%uolocaldir%\Desktop" "%uostorage%uoclient\Desktop" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\uoclient-config-up.log /TEE /NDL
-%uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\OSI\Profiles" "%uostorage%Razor\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\razorprofiles-config-up.log /TEE /NDL
-%uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\OSI\Macros" "%uostorage%Razor\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\razormacros.log /TEE /NDL
+%uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\%client%\Profiles" "%uostorage%Razor\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\razorprofiles-config-up.log /TEE /NDL
+%uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\razormacros.log /TEE /NDL
 %uostorage%bin\robocopy-uoam.exe "%uolocaldir%\UOAM" "%uostorage%UOAM" /MIR /R:3 /Z /W:1 /MT:100 /LOG:%uostorage%bin\razormacros.log /TEE /NDL
 
 
