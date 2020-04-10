@@ -4,27 +4,26 @@
 :: cloud service. Using this script, your UO Client, UOAM, and UORazor 
 :: settings will be able to follow you from PC to PC, allowing you to play
 :: on your laptop or desktop or multiple desktops with ease.
+:: 
+:: This will backup your existing Razo, UOAM, and UO Client configs
+:: to the backup folder using 7zip. Drop 7z.exe in the bin folder.
+echo --------------------------------------------------------------------
+echo UOSync is running
+echo See "%~dp0uosync.log" for status and errors
+echo --------------------------------------------------------------------
 
-REM %~dp0 is the location of this batch file. Run it from anywhere 
-REM  and it will sync to that location. This should be a folder that
-REM  syncs to a cloud service like Google Drive, Box, Dropbox, etc...
-REM  You will only need about 250mb of space to sync
+echo.
 
-:: This is the directory location of the script. Should be in cloud synchronized uo folder
-set uostorage=%~dp0
-set uorazorlocal=%uostorage%Razor
-set uolocaldir=C:\UORenaissance
-set uoamlocal=%uolocaldir%\UOAM
-:: Client being used OSI or CUO 
-:: Directs sync to use specific client directory
-set client=OSI
-set PATH=%uostorage%bin;%PATH%
+call :main >"%~dp0uosync.log"
+exit /b
+
+:main
+call "%~dp0config.cmd"
 
 if not exist "%uolocaldir%" (
 	echo No Ultime Online Client installed.
 	echo Please install the package from http://uorenaissance.com
-	pause
-	exit 1
+	exit /B 1
 )
 
 ::Kill any previous robocopy sessions
@@ -33,7 +32,7 @@ tasklist | c:\windows\system32\find "robocopy-razor" >nul 2>&1
 IF ERRORLEVEL 1 (
   echo.
 ) ELSE (
-  ECHO Killing Razor
+  ECHO Killing Razor Sync
   IF ERRORLEVEL 0 taskkill /IM robocopy-razor.exe /F
 )
 
@@ -41,7 +40,7 @@ tasklist | c:\windows\system32\find "robocopy-uoclient" >nul 2>&1
 IF ERRORLEVEL 1 (
   echo.
 ) ELSE (
-  ECHO Killing UO Client
+  ECHO Killing UO Client Sync
   IF ERRORLEVEL 0 taskkill /IM robocopy-uoclient.exe /F
 )
 
@@ -49,16 +48,36 @@ tasklist | c:\windows\system32\find "robocopy-uoam" >nul 2>&1
 IF ERRORLEVEL 1 (
   echo.
 ) ELSE (
-  ECHO Killing UOAM
+  ECHO Killing UOAM Sync
   IF ERRORLEVEL 0 taskkill /IM robocopy-uoam.exe /F
 )
 
 ::Prepare backup directory
 echo Checking for "%uostorage%backup"
-
 if not exist "%uostorage%backup" (
 	echo Backup directory does not exist. Creating backup directory at "%uostorage%backup"
 	mkdir "%uostorage%backup"
+) ELSE (
+	echo OK
+)
+
+::Prepare bin directory
+echo Checking for "%uostorage%bin"
+if not exist "%uostorage%bin" (
+	echo Bin directory does not exist. Creating backup directory at "%uostorage%bin"
+	mkdir "%uostorage%bin"
+) ELSE (
+	echo OK
+)
+
+:: Checking for 7za.exe utility used for backups
+echo Check for %uostorage%bin\7za.exe utility used for backups
+if not exist "%uostorage%bin\7za.exe" (
+	echo %uostorage%bin\7za.exe missing
+	echo Please install from https://www.7-zip.org/download.html
+	exit /B 1
+) ELSE (
+	echo OK
 )
 
 ::Prepare UOAM Directory
@@ -69,8 +88,8 @@ if not exist "%uoamlocal%" (
 	if exist "C:\Program Files\UOAM" (
 		robocopy "C:\Program Files\UOAM" "%uoamlocal%" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoam-config-up.log /TEE /NDL"
 	)   ELSE (
-		echo No UOAM installed. Please install the UO Package from http://uorenaissance.com
-		exit 0 
+		echo No UOAM installed. Please install the UOR Package from http://uorenaissance.com
+		exit /b 1 
 		)
 )
 
@@ -101,10 +120,9 @@ for /f "skip=%Keep% delims=" %%A in ('dir /a:-d /b /o:-d /t:c %uostorage%backup\
 echo.
 echo UO Local Directory is %uoamlocal%"
 cd "%uostorage%UOAM"
-cd
 powershell -ExecutionPolicy Unrestricted -f "%uoamlocal%\UORHousePositions.ps1"
 cd "%uostorage%"
-cd
+
 
 ::Sync UOAM from the cloud
 echo Sync UOAM from %uostorage%UOAM to %uolocaldir%\UOAM
@@ -118,59 +136,51 @@ echo.
 if not exist "%uostorage%bin\robocopy-razor.exe" copy c:\windows\system32\robocopy.exe "%uostorage%bin\robocopy-razor.exe"
 if not exist "%uolocaldir%\Razor\%client%\Profiles" mkdir "%uolocaldir%\Razor\%client%\Profiles"
 if not exist "%uolocaldir%\Razor\%client%\Macros" mkdir "%uolocaldir%\Razor\%client%\Macros"
-robocopy-razor.exe "%uostorage%Razor\Profiles" "%uolocaldir%\Razor\%client%\Profiles" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razorprofilesOSI.log"
-robocopy-razor.exe "%uostorage%Razor\Macros" "%uolocaldir%\Razor\%client%\Macros" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\robocopy-razormacrosOSI.log"
+robocopy-razor.exe "%uostorage%Razor\Profiles" "%uolocaldir%\Razor\%client%\Profiles" /MIR /R:3 /Z /W:1 /MT:100
+robocopy-razor.exe "%uostorage%Razor\Macros" "%uolocaldir%\Razor\%client%\Macros" /MIR /R:3 /Z /W:1 /MT:100
 
 ::Backup lastest Razor config
-if exist "%uostorage%Razor" 7za.exe u -r "%uostorage%backup\razor-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uostorage%Razor" 
+echo Backing up Razor config 
+if exist "%uostorage%Razor" 7za.exe u -r "%uostorage%backup\razor-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uostorage%Razor" ^2^>nul
 
 ::UO Client Desktop settings sync cloud
 echo Syncing UOClient Desktop settings from %uostorage%uoclient\Desktop to %uolocaldir%\Desktop
-echo.
 if not exist "%uostorage%bin\robocopy-uoclient.exe" copy c:\windows\system32\robocopy.exe "%uostorage%bin\robocopy-uoclient.exe"
 if not exist "%uolocaldir%\Desktop" mkdir "%uolocaldir%\Desktop" 
-if exist "%uostorage%Desktop" 7za.exe u -r "%uostorage%backup\uoclientdesktop-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uolocaldir%\Desktop" 
-robocopy-uoclient.exe "%uostorage%uoclient\Desktop" "%uolocaldir%\Desktop" /MIR /R:3 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoclient-config-down.log"
+if exist "%uostorage%Desktop" 7za.exe u -r "%uostorage%backup\uoclientdesktop-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uolocaldir%\Desktop" ^2^>nul
+robocopy-uoclient.exe "%uostorage%uoclient\Desktop" "%uolocaldir%\Desktop" /MIR /R:3 /Z /W:1 /MT:100
 
 
 ::Backup UOAM .map files
 echo Backing up UOAM .map files
-if exist "%uoamlocal%" 7za.exe u -r "%uostorage%backup\uoam-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uoamlocal%\*.map"
+if exist "%uoamlocal%" 7za.exe u -r "%uostorage%backup\uoam-%DATE:~-4%.%DATE:~4,2%.%DATE:~7,2%.7z" "%uoamlocal%\*.map" ^2^>nul
 
 ::Start Razor and UOAM
 echo Starting Razor and UOAM
-::if exist "%uoamlocal%\uoam.reg" @powershell start -verb runas reg import "%uoamlocal%\uoam.reg"
+Echo Importing UOAM registry settings 
 if exist "%uoamlocal%\uoam.reg" reg import "%uoamlocal%\uoam.reg"
 
 ::start "razor" /D "%uorazorlocal%" "%uorazorlocal%\Razor.exe"
 rem Start UO Renaissance Launcher
 "%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
 
-::Start EasyUO and OpenEUO
-::cd %uostorage%easyuo
-::@powershell start -verb runas easyuo.exe
-::cd %uostorage%openeuo
-::@powershell start -verb runas openeuo.exe
-::cd %uostorage%
-
-::Start Hexchat IRC - Depricated moved to Discord for UOR - still useful for Twitch however
-::echo Starting Hexchat
-if exist "%uostorage%HexChatPortable\HexChatPortable.exe" start "Hexchat" /D "%uostorage%HexChatPortable\" "%uostorage%HexChatPortable\HexChatPortable.exe"
+::Start Custom Apps 
+call "%uostorage%customapps.cmd"
 
 ::Start up sync for UOClient
 echo Starting UOClient Desktop sync up
 echo.
-start /B "uoclient up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoclient.exe" "%uolocaldir%\Desktop" "%uostorage%uoclient\Desktop" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoclient-up.log" /TEE /NDL"
-start /B "uorazor OSI profiles up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Profiles" "%uostorage%Razor\Profiles" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razorprofilesOSI-up.log" /TEE /NDL"
-start /B "uorazor OSI macros up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\razormacrosOSI-up.log" /TEE /NDL"
-start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uolocaldir%\UOAM" "%uostorage%UOAM" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100 /LOG:"%uostorage%bin\uoam-up.log" /TEE /NDL"
+echo Syncing "%uolocaldir%\Desktop" to "%uostorage%uoclient\Desktop"
+start /B "uoclient up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoclient.exe" "%uolocaldir%\Desktop" "%uostorage%uoclient\Desktop" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
+echo Syncing "%uolocaldir%\Razor\%client%\Profiles" to "%uostorage%Razor\Profiles"
+start /B "uorazor profiles up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Profiles" "%uostorage%Razor\Profiles" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
+echo Syncing "%uolocaldir%\Razor\%client%\Macros" to "%uostorage%Razor\Macros"
+start /B "uorazor macros up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
+echo Syncing "%uolocaldir%\UOAM" "%uostorage%UOAM"
+start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uolocaldir%\UOAM" "%uostorage%UOAM" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
 
-::Task Process watch here
-::start "UOWatch" %comspec% /C "%uostorage%uowatch.cmd"
-::start "UOWatch" wscript //B  "%uostorage%uowatch.vbs"
-::@powershell start -verb runas wscript //B  "%uostorage%uowatch.vbs"
 cd %uostorage%
-@powershell start -verb runas "uorwatch.cmd"
+@powershell -ExecutionPolicy Unrestricted start -verb runas "uosyncwatch.cmd"
 
 
 
