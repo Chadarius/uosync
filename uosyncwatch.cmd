@@ -1,7 +1,10 @@
 @echo off
 ::UO Watcher
-REM This watches the Razor and UOAM processes to see if they are complete. 
-REM  If they are it exports the user registry settings.
+:: This watches the Razor and UORLauncher processes.
+:: When they are no longer running it kills processes from the killapps.cmd,
+:: shuts down background sync, and
+:: syncs configuration data to the cloud drive one last time.
+
 echo --------------------------------------------------------------------
 echo Watching Razor and UORLauncher. 
 echo This script will cleanup, sync, and exit 

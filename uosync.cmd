@@ -177,7 +177,7 @@ start /B "uorazor profiles up sync" %comspec% /S /C ""%uostorage%bin\robocopy-ra
 echo Syncing "%uolocaldir%\Razor\%client%\Macros" to "%uostorage%Razor\Macros"
 start /B "uorazor macros up sync" %comspec% /S /C ""%uostorage%bin\robocopy-razor.exe" "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
 echo Syncing "%uolocaldir%\UOAM" "%uostorage%UOAM"
-start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uolocaldir%\UOAM" "%uostorage%UOAM" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
+start /B "uoam up sync" %comspec% /S /C ""%uostorage%bin\robocopy-uoam.exe" "%uoamlocal%" "%uostorage%UOAM" /MIR /Mon:1 /R:1 /Z /W:1 /MT:100"
 
 cd %uostorage%
 @powershell -ExecutionPolicy Unrestricted start -verb runas "uosyncwatch.cmd"

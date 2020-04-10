@@ -9,7 +9,9 @@
 /OpenEUO
 /Razor
 /uoclient
-
+config.cmd
+customapps.cmd
+killapps.cmd
 desktop.ini
 *.swp
 .DS_Store
