@@ -54,6 +54,7 @@ taskkill /IM robocopy-uoclient.exe /F
 taskkill /IM uoam_auto.exe /F
 taskkill /IM robocopy-razor.exe /F
 taskkill /IM robocopy-uoam.exe /F
+taskkill /IM robocopy-classicuo.exe /F
 
 call "%uostorage%killapps.cmd"
 
