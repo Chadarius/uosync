@@ -56,6 +56,8 @@ taskkill /IM robocopy-razor.exe /F
 taskkill /IM robocopy-uoam.exe /F
 taskkill /IM robocopy-classicuo.exe /F
 
+:: Kill any custom apps you want to close when UO closes.
+if not exist "%uostorage%killapps.cmd" copy "%uostorage%example.killapps.cmd" "%uostorage%killapps.cmd"
 call "%uostorage%killapps.cmd"
 
 ::Sync up Razor and UOClient Desktop directories to the cloud one last time.

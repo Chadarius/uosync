@@ -18,6 +18,7 @@ call :main >"%~dp0uosync.log"
 exit /b
 
 :main
+if not exist "%~dp0config.cmd" copy "%~dp0example.config.cmd" "%~dp0config.cmd"
 call "%~dp0config.cmd"
 
 if not exist "%uolocaldir%" (
@@ -82,7 +83,7 @@ if not exist "%uostorage%bin" (
 echo Check for %uostorage%bin\7za.exe utility used for backups
 if not exist "%uostorage%bin\7za.exe" (
 	echo %uostorage%bin\7za.exe missing
-	echo Please install from https://www.7-zip.org/download.html
+	echo Please install from https://www.7-zip.org/download.html and copy 7za.exe to %uostorage%bin
 	exit /B 1
 ) ELSE (
 	echo OK
@@ -186,6 +187,8 @@ rem Start UO Renaissance Launcher
 "%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
 
 ::Start Custom Apps 
+:: If customapps.cmd doesn't exist yet copy example.customapps.cmd and use that
+if not exist "%uostorage%customapps.cmd" copy "%uostorage%example.customapps.cmd" "%uostorage%customapps.cmd"
 call "%uostorage%customapps.cmd"
 
 ::Start up sync for UOClient

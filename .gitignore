@@ -10,9 +10,9 @@
 /Razor
 /uoclient
 /classicuo
-config.cmd
-customapps.cmd
-killapps.cmd
+/config.cmd
+/customapps.cmd
+/killapps.cmd
 desktop.ini
 *.swp
 .DS_Store
