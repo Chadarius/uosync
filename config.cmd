@@ -14,7 +14,8 @@ set uolocaldir=C:\UORenaissance
 set uoamlocal=%uolocaldir%\UOAM
 :: Client being used OSI or CUO 
 :: Directs sync to use specific client directory
-set client=OSI
+set client=CUO
+set classicuodir=%uolocaldir%\ClassicUO\Data
 set PATH=%uostorage%bin;%PATH%
 
 echo UO Cloud storage is %uostorage%
@@ -22,5 +23,5 @@ echo UO Razor Cloud storage is %uorazorlocal%
 echo UO Local install directory is %uolocaldir%
 echo UOAM Local install directory is %uoamlocal%
 echo UORenaissance Client is %client%
-
+echo ClassicUO Client Data is %classicuodir%
 exit /b 0

@@ -57,16 +57,16 @@ taskkill /IM robocopy-uoam.exe /F
 
 call "%uostorage%killapps.cmd"
 
-::Export Registry Here
-echo Exporting UOAM registry settings
-del /q "%uoamlocal%\uoam.reg"
-reg export "HKCU\Software\UOAM" "%uoamlocal%\uoam.reg" /y
-
 ::Sync up Razor and UOClient Desktop directories to the cloud one last time.
 echo Final sync to cloud drive
 %uostorage%bin\robocopy-uoclient.exe "%uolocaldir%\Desktop" "%uostorage%uoclient\Desktop" /MIR /R:3 /Z /W:1 /MT:100
 %uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\%client%\Profiles" "%uostorage%Razor\Profiles" /MIR /R:3 /Z /W:1 /MT:100
 %uostorage%bin\robocopy-razor.exe "%uolocaldir%\Razor\%client%\Macros" "%uostorage%Razor\Macros" /MIR /R:3 /Z /W:1 /MT:100
 %uostorage%bin\robocopy-uoam.exe "%uoamlocal%" "%uostorage%UOAM" /MIR /R:3 /Z /W:1 /MT:100 
+%uostorage%bin\robocopy-classicuo.exe "%classicuodir%" "%uostorage%classicuo" /MIR /R:3 /Z /W:1 /MT:100 
 
+::Export Registry Here
+echo Exporting UOAM registry settings
+del /q "%uostorage%UOAM\uoam.reg"
+reg export "HKCU\Software\UOAM" "%uostorage%UOAM\uoam.reg" /y
 

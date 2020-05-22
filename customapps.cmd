@@ -7,7 +7,7 @@
 ::	call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
 
 
-call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
+::call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
 call :startapp "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe"
 exit /b 0
 
