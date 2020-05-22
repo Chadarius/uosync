@@ -1,15 +1,20 @@
 @echo off
+::#######################################################################
+:: customapps.cmd
+:: Version v0.1.3
 ::Custom apps for uosync
 ::Add whatever apps or utilities you want to run here
 ::Examples:
 ::	OBS
 ::	call :startapp "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe"
-::  Portable HexChat
-::	call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
+::  HexChat Portable
+::  call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
+::#######################################################################
 
-
-call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
-call :startapp "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe"
+:: Start HexChat Portable
+rem call :startapp "%uostorage%HexChatPortable\HexChatPortable.exe"
+:: Start OBS
+rem call :startapp "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe"
 exit /b 0
 
 :startapp

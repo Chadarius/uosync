@@ -13,6 +13,7 @@
 /config.cmd
 /customapps.cmd
 /killapps.cmd
+/uosync-latest.zip
 desktop.ini
 *.swp
 .DS_Store

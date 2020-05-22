@@ -1,5 +1,6 @@
 @echo off
-::UO Watcher
+:: uosyncwat.cmd
+:: Version v0.1.3
 :: This watches the Razor and UORLauncher processes.
 :: When they are no longer running it kills processes from the killapps.cmd,
 :: shuts down background sync, and

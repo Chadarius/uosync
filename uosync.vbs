@@ -1,3 +1,4 @@
+' Version v0.1.3
 Set WshShell = CreateObject("Wscript.Shell")
 
 strPath = Wscript.ScriptFullName

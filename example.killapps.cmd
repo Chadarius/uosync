@@ -1,13 +1,16 @@
 @echo off
+::#######################################################################
+:: killapps.cmd
+:: Version v0.1.3
 :: Kill apps with the :killapp function
 :: call :killapp "app.exe"
 :: Where app.exe is the name of the exe running listed in Task Manager
 
 ::Kill Hexchat
-call :killapp "hexchat.exe"
+rem call :killapp "hexchat.exe"
 
 ::Kill obs64
-call :killapp "obs64.exe"
+rem call :killapp "obs64.exe"
 
 exit /b 0
 

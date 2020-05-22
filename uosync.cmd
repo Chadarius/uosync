@@ -1,12 +1,18 @@
 @echo off
 ::#######################################################################
-:: This script will sync the UO:Renaissance install with a locally sync'd
+:: uosync.cmd
+:: Version v0.1.3
+:: uosync.cmd will sync the UO:Renaissance install with a locally sync'd
 :: cloud service. Using this script, your UO Client, UOAM, and UORazor 
 :: settings will be able to follow you from PC to PC, allowing you to play
 :: on your laptop or desktop or multiple desktops with ease.
 :: 
 :: This will backup your existing Razo, UOAM, and UO Client configs
 :: to the backup folder using 7zip. Drop 7z.exe in the bin folder.
+:: Version v0.1.3 
+:: There are changes to the config.cmd for this version
+::#######################################################################
+
 echo --------------------------------------------------------------------
 echo UOSync is running
 echo See "%~dp0uosync.log" for status and errors
@@ -184,7 +190,14 @@ if exist "%uoamlocal%\uoam.reg" reg import "%uoamlocal%\uoam.reg"
 
 ::start "razor" /D "%uorazorlocal%" "%uorazorlocal%\Razor.exe"
 rem Start UO Renaissance Launcher
-"%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms" (
+    echo Launching Ultima Online Renaissance Launcher
+    "%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
+) Else (
+	echo UO Renaissance Launcher does not appear to be installed.
+	echo Cannot find "%appdata%\Microsoft\Windows\Start Menu\Programs\UO Renaissance\UO Renaissance Launcher.appref-ms"
+	exit /b 1
+)
 
 ::Start Custom Apps 
 :: If customapps.cmd doesn't exist yet copy example.customapps.cmd and use that
