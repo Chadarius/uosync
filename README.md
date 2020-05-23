@@ -17,7 +17,7 @@ UOSync is a setup of scripts that will sync your Ultima Online config to your cl
 
 ## Install
 
-1. Download uosync-latest.cmd from the github link to a directory to a synchronized folder for your cloud and unzip it. Example: "%userprofile%\\Google Drive\\uosync". 
+1. Download <https://github.com/Chadarius/uosync/archive/latest.zip> from the github link to a directory to a synchronized folder for your cloud and unzip it. Example: "%userprofile%\\Google Drive\\uosync". 
 2. Copy example.config.cmd to config.cmd and make sure you set the uolocaldir variable to where the UO Client/ClassicUO Client is installed. If you don't copy it, it will create a default config.cmd that points to C:\\UORenaissance by default. You need to change this if it is installed elsewhere.
 3. Then run uosync.cmd. You can also run uosync.vbs which will run it silently without showing a command prompt. You can create an icon to launch it with the following command line. "c:\\windows\\system32\\wscript.exe /b %userprofile%\\Cloud Drive Path\\uosync\\uosync.vbs"
 4. You can run update.cmd to download the latest script versions. You may need to check the example.config.cmd to see if you need to update your config.cmd with newer settings.
