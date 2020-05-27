@@ -5,7 +5,7 @@
 :: variable settings for uosync.cmd
 ::#######################################################################
 
-set uosyncver=v0.1.3
+uosyncver=v0.1.3
 :: Sets the directory of the script
 :: I create uosync folder in Google Drive
 :: and run it from there
