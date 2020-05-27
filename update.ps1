@@ -1,4 +1,4 @@
-﻿<# 
+<# 
     File name = update.ps1
     uosyncver=v0.1.4
     Downloads zip archive from Github repository

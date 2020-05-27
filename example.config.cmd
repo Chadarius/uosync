@@ -1,11 +1,11 @@
 @echo off
 ::#######################################################################
 :: config.cmd
-:: Version v0.1.3
+:: Version v0.1.4
 :: variable settings for uosync.cmd
 ::#######################################################################
 
-uosyncver=v0.1.3
+uosyncver=v0.1.4
 :: Sets the directory of the script
 :: I create uosync folder in Google Drive
 :: and run it from there

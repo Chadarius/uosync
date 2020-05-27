@@ -1,7 +1,7 @@
 @echo off
 ::#######################################################################
 :: customapps.cmd
-:: Version v0.1.3
+:: Version v0.1.4
 ::Custom apps for uosync
 ::Add whatever apps or utilities you want to run here
 ::Examples:

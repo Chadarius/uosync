@@ -4,6 +4,8 @@ UOSync is a setup of scripts that will sync your Ultima Online config to your cl
 
 * Backup all of your settings for the UO Client, ClassicUO Client, Razor, and UOAM before you try this script! In fact, I would just backup all of your UO clients, settings, and applications. Don't try this script without a backup. You have been warned!
 
+[Latest Version - v0.1.4 Beta](https://github.com/Chadarius/uosync/archive/latest.zip)
+
 ## Features
 
 * Best used with [UO Renaissance Launcher](http://uorenaissance.com/downloads/launcher/UORLauncherSetup.exe) or [UOR PC Package](http://www.uorenaissance.com/downloads/UO_Renaissance_Client_Full.exe) but it can be used with any UO client and or ClassicUO client install. Just make sure you edit the config.cmd to point the uolocaldir variable to the correct location.

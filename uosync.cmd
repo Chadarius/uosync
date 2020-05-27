@@ -1,7 +1,7 @@
 @echo off
 ::#######################################################################
 :: uosync.cmd
-:: Version v0.1.3
+:: Version v0.1.4
 :: uosync.cmd will sync the UO:Renaissance install with a locally sync'd
 :: cloud service. Using this script, your UO Client, UOAM, and UORazor 
 :: settings will be able to follow you from PC to PC, allowing you to play
@@ -9,7 +9,7 @@
 :: 
 :: This will backup your existing Razo, UOAM, and UO Client configs
 :: to the backup folder using 7zip. Drop 7z.exe in the bin folder.
-:: Version v0.1.3 
+:: Version v0.1.4 
 :: There are changes to the config.cmd for this version
 ::#######################################################################
 
