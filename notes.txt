@@ -9,8 +9,8 @@ Git Commands to update
 -------------------------
 git add.
 git commit -m "Commit notes"
-git tag latest --force
-git tag vx.x.x --force
+git tag -a -f latest -m "vx.x.x beta"
+git tag -a -f vx.x.x -m "vx.x.x beta"
 git push origin master
 
 
