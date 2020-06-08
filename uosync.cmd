@@ -141,7 +141,7 @@ for /f "skip=%Keep% delims=" %%A in ('dir /a:-d /b /o:-d /t:c %uostorage%backup\
 echo.
 echo UO Local Directory is %uoamlocal%"
 cd "%uostorage%UOAM"
-powershell -ExecutionPolicy Unrestricted -f "%uoamlocal%\UORHousePositions.ps1"
+forfiles /P "D:\nextcloud\uo\uosync\UOAM\" /M UORHouses*.map /D -1 /C "powershell -ExecutionPolicy Unrestricted -f .\UORHousePositions.ps1"
 cd "%uostorage%"
 
 ::Sync UOAM from the cloud
