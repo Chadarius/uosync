@@ -1,7 +1,7 @@
 @echo off
 ::#######################################################################
 :: killapps.cmd
-:: Version v0.1.4
+:: Version v0.1.5
 :: Kill apps with the :killapp function
 :: call :killapp "app.exe"
 :: Where app.exe is the name of the exe running listed in Task Manager

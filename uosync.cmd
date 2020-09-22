@@ -1,7 +1,7 @@
 @echo off
 ::#######################################################################
 :: uosync.cmd
-:: Version v0.1.4
+:: Version v0.1.5
 :: uosync.cmd will sync the UO:Renaissance install with a locally sync'd
 :: cloud service. Using this script, your UO Client, UOAM, and UORazor 
 :: settings will be able to follow you from PC to PC, allowing you to play

@@ -1,6 +1,6 @@
 <# 
     File name = update.ps1
-    uosyncver=v0.1.4
+    uosyncver=v0.1.5
     Downloads zip archive from Github repository
     uosync-latest.zip and updates files in the uosync directory
 #>

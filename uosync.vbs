@@ -1,4 +1,4 @@
-' Version v0.1.3
+' Version v0.1.5
 Set WshShell = CreateObject("Wscript.Shell")
 
 strPath = Wscript.ScriptFullName
