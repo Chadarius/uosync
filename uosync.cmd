@@ -141,8 +141,13 @@ for /f "skip=%Keep% delims=" %%A in ('dir /a:-d /b /o:-d /t:c %uostorage%backup\
 echo.
 echo UO Local Directory is %uoamlocal%"
 cd "%uostorage%UOAM"
-forfiles /P "D:\nextcloud\uo\uosync\UOAM\" /M UORHouses*.map /D -1 /C "powershell -ExecutionPolicy Unrestricted -f .\UORHousePositions.ps1"
+start /w powershell.exe -ExecutionPolicy bypass -f "%uostorage%UOAM\UORHousePositions.ps1"
 cd "%uostorage%"
+
+:: Sync UORenaissance Houses.txt to ClassicUO World Map file UORHouses.csv
+:: Check to see if CSV file is older than 1 day and then process it.
+cd "%uostorage%"
+start /w powershell.exe -ExecutionPolicy bypass -f "%uostorage%UORHousePositions.ps1"
 
 ::Sync UOAM from the cloud
 echo Sync UOAM from %uostorage%UOAM to %uolocaldir%\UOAM
